@@ -13,15 +13,21 @@ import live.copilot.client.ui.CopilotAPIResponseCallback
 class MainActivity : AppCompatActivity() {
 
     private var navController: NavController? = null
+    private var apiResponseCallback: CopilotAPIResponseCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         /**
-        * Initialize the navigation controller with the NavHostFragment
-        **/
+         * Initialize the navigation controller with the NavHostFragment
+         **/
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+
+        /**
+         * Initialize the Copilot SDK
+         **/
+        initCopilot()
     }
 
     /**
@@ -34,9 +40,9 @@ class MainActivity : AppCompatActivity() {
      *
      * @param message Optional initial message to prefill in the chat.
      */
-    fun openCopilot(message: String? = null) {
+    private fun initCopilot() {
 
-        val apiResponseCallback = object : CopilotAPIResponseCallback {
+        apiResponseCallback = object : CopilotAPIResponseCallback {
             /**
              * Called when the app's custom toolbar should be hidden.
              */
@@ -80,13 +86,48 @@ class MainActivity : AppCompatActivity() {
                     userIdentifier = "" // Unique user identifier
                 ),
                 appearance = CopilotAppearance(
-                    titleText = "Copilot AI" // Title text for the Copilot interface
+                    toolbarColor = "#FFFFFF",
+                    backgroundColor = "#FFFFFF",
+                    titleText = "Copilot AI" // Title text for the Copilot interface,
                 )
             )
         )
 
         // Assign the current activity to Copilot and show the conversations.
-        Copilot.currentActivity = this
-        Copilot.showConversations(navController = navController, callback = apiResponseCallback, message = message)
+        Copilot.setActivity(this)
+
+    }
+
+
+    /**
+     * Opens the Copilot AI chat interface.
+     *
+     * @param message An optional initial message to prefill in the chat interface.
+     *
+     * This method:
+     * 1. Displays the Copilot chat interface using the navigation controller.
+     * 2. Passes the callback interface to handle events triggered by the SDK.
+     */
+    fun openChat(message: String? = null) {
+        Copilot.showConversations(
+            navController = navController,
+            callback = apiResponseCallback,
+            initialMessage = message
+        )
+    }
+
+    /**
+     * Initiates a voice call using the Copilot SDK.
+     *
+     * This method:
+     * 1. Initiates a call via the Copilot SDK.
+     * 2. Uses the provided `NavController` for navigation.
+     * 3. Passes the callback interface to handle SDK events.
+     */
+    fun makeCall() {
+        Copilot.makeCall(
+            navController = navController,
+            callback = apiResponseCallback,
+        )
     }
 }

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CoPilotApp</string>
-    <string name="open_copilot">Open Copilot</string>
+    <string name="open_chat">Chat with me</string>
+    <string name="make_call">Call me here</string>
     <string name="welcome_to_home_screen">Welcome to home screen</string>
 </resources>
