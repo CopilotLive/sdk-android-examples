@@ -40,7 +40,7 @@ To integrate the Copilot SDK to your project:
 2. Add the following dependency to your app module's `build.gradle` file (project/app/build.gradle):
    ```ruby
    dependencies {
-    implementation 'live.copilot.client:copilot:{{latest-version}}'
+    implementation 'live.copilot.client:sdk:{{latest-version}}'
    }
    ```
 
@@ -48,7 +48,7 @@ To integrate the Copilot SDK to your project:
   
   - [Maven central repository](https://central.sonatype.com/artifact/live.copilot.client/copilot/versions)
     
-   For e.g. implementation 'live.copilot.client:copilot:1.0.0' 
+   For e.g. implementation 'live.copilot.client:sdk:1.1.0' 
 
 ### Initialization
 
