@@ -46,7 +46,7 @@ To integrate the Copilot SDK to your project:
 
    Replace {{latest-version}} with the latest version of the SDK from the link below
   
-  - [Maven central repository](https://central.sonatype.com/artifact/live.copilot.client/copilot/versions)
+  - [Maven central repository](https://central.sonatype.com/artifact/live.copilot.client/sdk/versions)
     
    For e.g. implementation 'live.copilot.client:sdk:1.1.0' 
 
