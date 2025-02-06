@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         // Initialize Copilot SDK with configuration settings.
         Copilot.initialize(
             CopilotConfig(
-                url = "https://test.ai.copilot.live/", // Copilot URL
+                token = "", // Copilot URL
                 user = CopilotUser(
                     fullName = "", // User's full name
                     phoneNumber = "", // User's phone number
@@ -129,5 +129,33 @@ class MainActivity : AppCompatActivity() {
             navController = navController,
             callback = apiResponseCallback,
         )
+    }
+
+    /**
+     * Logs in a user to the Copilot SDK.
+     *
+     * The SDK will use this information to personalize interactions and manage sessions.
+     */
+    fun login() {
+        val user = CopilotUser(
+            fullName = "", // The full name of the user
+            phoneNumber = "", // The user's phone number
+            profileImageUrl = "", // URL for the user's profile image
+            emailAddress = "", // The user's email address
+            userIdentifier = "" // A unique identifier for the user
+        )
+        // Notify Copilot SDK about the authenticated user's details
+        Copilot.notifyLoginSuccess(user)
+    }
+
+    /**
+     * Logs out the current user from the Copilot SDK.
+     *
+     * This method clears the user's session and associated data within the SDK.
+     * After calling this, the user will be considered logged out, and any active sessions
+     * will be terminated.
+     */
+    fun logout() {
+        Copilot.logout()
     }
 }

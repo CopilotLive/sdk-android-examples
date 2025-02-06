@@ -41,6 +41,14 @@ class HomeScreenFragment : Fragment() {
         binding.callButton.setOnClickListener {
             mainActivity?.makeCall()
         }
+
+        binding.loginButton.setOnClickListener {
+            mainActivity?.login()
+        }
+
+        binding.logoutButton.setOnClickListener {
+            mainActivity?.logout()
+        }
     }
 
     override fun onDestroyView() {

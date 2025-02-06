@@ -40,4 +40,29 @@
         app:layout_constraintStart_toEndOf="@+id/chatButton"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="login"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/red"
+        android:layout_marginBottom="@dimen/dimen_36dp"
+        app:layout_constraintStart_toStartOf="@+id/logoutButton"
+        app:layout_constraintBottom_toTopOf="@+id/logoutButton" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:layout_marginBottom="@dimen/dimen_36dp"
+        android:backgroundTint="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

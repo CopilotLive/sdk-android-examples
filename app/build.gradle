@@ -44,8 +44,9 @@ dependencies {
     //implementation fileTree(include: ['*.aar'], dir: 'libs')
     implementation "com.airbnb.android:lottie:6.0.0"
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation "androidx.webkit:webkit:1.10.0"
 
-    implementation 'live.copilot.client:sdk:1.1.0'
+    implementation 'live.copilot.client:sdk:0.0.1'
 
     api 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation 'androidx.appcompat:appcompat:1.7.0'
