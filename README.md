@@ -5,6 +5,12 @@
 
 The Copilot SDK is a robust framework designed for seamless integration into Android applications, offering a streamlined experience for developers. The minimum deployment target SDK is 21.
 
+## SDK Requirements
+
+1. **Login** to the [Copilot Platform](https://platform.copilot.live/)
+
+2. **Open your Copilot** and Navigate to the **Deploy** section to retrieve the integration token.
+
 ## Features
 
 - Easy integration with Maven dependency.
@@ -76,7 +82,7 @@ fun initializeCopilotSDK() {
         
       // Create a configuration object with the URL, user data, and appearance settings
       val copilotConfig = CopilotConfig(
-          url = "https://test.ai.copilot.live/", // Replace it with the Copilot URL
+          token = "YOUR_COPILOT_TOKEN", // Replace with your actual Copilot token
           user = userData, // Pass the user data
           appearance = appearance // Pass the appearance settings
       )
@@ -252,7 +258,7 @@ fun makeCall() {
 Initializes the SDK with the provided configuration.
 
 - **Parameters:**
-  - `config` (CopilotConfig): The configuration containing the URL, user details, and UI appearance.
+  - `config` (CopilotConfig): The configuration containing the Token, User details, and UI appearance.
  
 ### `setActivity`
 
