@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         // Initialize Copilot SDK with configuration settings.
         Copilot.initialize(
             CopilotConfig(
-                token = "", // Copilot URL
+                token = "", // Copilot Token
                 user = CopilotUser(
                     fullName = "", // User's full name
                     phoneNumber = "", // User's phone number
