@@ -17,8 +17,8 @@ The Copilot SDK is a robust framework designed for seamless integration into And
 - Compatible with Android 5 and later.
 - Modular and extensible design.
 - Lightweight and optimized for performance.
-- Provides conversation interfaces and deep linking capabilities.
-- User authentication and UI appearance customization support.
+- Provides **conversation interfaces**, **deep linking capabilities**, and **voice call assistance**.
+- Supports **user authentication** and **UI appearance customization**.
 
 ## Requirements
 
@@ -80,7 +80,7 @@ fun initializeCopilotSDK() {
           titleText = "Copilot Assistant" // Title displayed in the tool bar
       )
         
-      // Create a configuration object with the URL, user data, and appearance settings
+      // Create a configuration object with the token, user data, and appearance settings
       val copilotConfig = CopilotConfig(
           token = "YOUR_COPILOT_TOKEN", // Replace with your actual Copilot token
           user = userData, // Pass the user data
@@ -216,7 +216,7 @@ Once implemented, pass the copilotAPIResponseCallback instance when invoking `Co
 
 #### Displaying Conversations
 
-To show the conversation interface:
+This feature enables users to interact with the Copilot assistant through a text-based conversation interface. Users can send and receive messages within the app, making it easy to communicate with the assistant for support, guided workflows, or general assistance. The conversation history is maintained, allowing users to resume past interactions seamlessly. This ensures a smooth and real-time messaging experience without switching between different platforms.
 
 ```kotlin
 
@@ -236,7 +236,9 @@ fun showConversation() {
 
 #### Make a Call
 
-To initiate a voice call:
+This feature allows users to communicate with the Copilot assistant using voice instead of text. It is useful for hands-free interactions, accessibility needs, or situations where speaking is more convenient than typing. Users can initiate a real-time voice conversation within the app, making it easy to get assistance without manually typing queries. The call feature provides a seamless experience by enabling direct access to voice-based support without additional steps.
+
+To enable this feature, ensure that microphone access permission is added in `AndroidManifest.xml`.
 
 ```kotlin
 fun makeCall() {
@@ -258,7 +260,7 @@ fun makeCall() {
 Initializes the SDK with the provided configuration.
 
 - **Parameters:**
-  - `config` (CopilotConfig): The configuration containing the Token, User details, and UI appearance.
+  - `config` (CopilotConfig): The configuration containing the token, user details, and UI appearance.
  
 ### `setActivity`
 
