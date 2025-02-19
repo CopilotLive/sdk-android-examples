@@ -325,4 +325,13 @@ Opens the conversation interface provided by the Copilot SDK.
   - `initialValue` (String?) : An optional initial value to provide context or predefined input for the conversation.
     
 
+## Troubleshooting
 
+### Common Issues
+
+- **Error: "Unsupported Android version"**
+  - Ensure that your app's minSdkVersion is set to 21 or later in your build.gradle file.
+- **Error: "Module not found"**
+  - Verify that the SDK dependency is correctly added in your build.gradle.
+- **Error: "Failed to load Copilot"**
+  - Ensure the configuration token is valid and accessible.
