@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                 appearance = CopilotAppearance(
                     toolbarColor = "#FFFFFF",
                     backgroundColor = "#FFFFFF",
+                    toolbarTintColor = "#000000",
                     titleText = "Copilot AI" // Title text for the Copilot interface,
                 )
             )
