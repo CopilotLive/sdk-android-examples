@@ -335,3 +335,5 @@ Opens the conversation interface provided by the Copilot SDK.
   - Verify that the SDK dependency is correctly added in your build.gradle.
 - **Error: "Failed to load Copilot"**
   - Ensure the configuration token is valid and accessible.
+- **Error: "No internet connection"**
+  - Check if the device has an active internet connection before initializing Copilot.
