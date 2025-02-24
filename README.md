@@ -77,6 +77,7 @@ fun initializeCopilotSDK() {
       val appearance = CopilotAppearance(
           toolbarColor = "#E9FBFB", // Background color for the toolbar bar
           backgroundColor = "#E9FBFB", // Background for the main UI
+          toolbarTintColor = "#000000", // Tint color for the toolbar icons
           titleText = "Copilot Assistant" // Title displayed in the tool bar
       )
         
@@ -164,6 +165,7 @@ To set a custom appearance:
 val appearance = CopilotAppearance(
                    toolbarColor = "#E9FBFB", // Background for the toolbar bar
                    backgroundColor = "#E9FBFB", // Background for the copilot view
+                   toolbarTintColor = "#000000", // Tint color for the toolbar icons
                    titleText = "Copilot Assistant" // Title displayed in the toolbar bar
         )
 Copilot.setAppearance(appearance)
