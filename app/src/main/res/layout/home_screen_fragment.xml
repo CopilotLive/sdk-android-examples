@@ -9,9 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/red"
+        android:textSize="@dimen/dimen_18dp"
+        android:textColor="@color/black"
         android:layout_marginTop="@dimen/dimen_36dp"
-        android:text="@string/welcome_to_home_screen"
+        android:text="@string/home_screen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -44,11 +45,12 @@
         android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="login"
+        android:text="Login"
         android:visibility="visible"
+        android:layout_marginEnd="@dimen/dimen_10dp"
         android:textColor="@color/white"
         android:backgroundTint="@color/red"
-        android:layout_marginBottom="@dimen/dimen_36dp"
+        android:layout_marginBottom="@dimen/dimen_12dp"
         app:layout_constraintStart_toStartOf="@+id/logoutButton"
         app:layout_constraintBottom_toTopOf="@+id/logoutButton" />
 
@@ -56,8 +58,9 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="logout"
+        android:text="Logout"
         android:visibility="visible"
+        android:layout_marginEnd="@dimen/dimen_10dp"
         android:textColor="@color/white"
         android:layout_marginBottom="@dimen/dimen_36dp"
         android:backgroundTint="@color/red"

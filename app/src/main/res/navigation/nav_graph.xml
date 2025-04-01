@@ -2,11 +2,15 @@
 <navigation xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeScreenFragment">
+    app:startDestination="@id/tokenConfigurationFragment">
 
     <fragment
         android:id="@+id/homeScreenFragment"
         android:name="com.example.copilotapp.HomeScreenFragment" />
+
+    <fragment
+        android:id="@+id/tokenConfigurationFragment"
+        android:name="com.example.copilotapp.TokenConfigurationFragment" />
 
     <include app:graph="@navigation/copilot_nav" />
 

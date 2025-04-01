@@ -33,7 +33,6 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.text.text = "Welcome to Home Screen"
         binding.chatButton.setOnClickListener {
             mainActivity?.openChat()
         }

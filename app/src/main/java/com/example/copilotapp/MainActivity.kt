@@ -3,8 +3,10 @@ package com.example.copilotapp
 import CopilotAppearance
 import CopilotConfig
 import CopilotUser
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import live.copilot.client.Copilot
@@ -12,12 +14,13 @@ import live.copilot.client.ui.CopilotAPIResponseCallback
 
 class MainActivity : AppCompatActivity() {
 
-    private var navController: NavController? = null
+    var navController: NavController? = null
     private var apiResponseCallback: CopilotAPIResponseCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.decorView.setBackgroundColor(Color.WHITE)
 
         /**
          * Initialize the navigation controller with the NavHostFragment
@@ -27,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * Initialize the Copilot SDK
          **/
-        initCopilot()
+        //initCopilot()
     }
 
     /**
@@ -40,8 +43,9 @@ class MainActivity : AppCompatActivity() {
      *
      * @param message Optional initial message to prefill in the chat.
      */
-    private fun initCopilot() {
+    fun initCopilot(token: String, environment: String) {
 
+        Log.i("rishabh","token $token :: environment $environment")
         apiResponseCallback = object : CopilotAPIResponseCallback {
             /**
              * Called when the app's custom toolbar should be hidden.
@@ -77,7 +81,8 @@ class MainActivity : AppCompatActivity() {
         // Initialize Copilot SDK with configuration settings.
         Copilot.initialize(
             CopilotConfig(
-                token = "", // Copilot Token
+                token = token, // Copilot Token,
+                environment = environment,
                 user = CopilotUser(
                     fullName = "", // User's full name
                     phoneNumber = "", // User's phone number
@@ -93,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
-
         // Assign the current activity to Copilot and show the conversations.
         Copilot.setActivity(this)
 
