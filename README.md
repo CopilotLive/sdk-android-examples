@@ -9,7 +9,7 @@ The Copilot SDK is a robust framework designed for seamless integration into And
 
 1. **Login** to the [Copilot Platform](https://platform.copilot.live/)
 
-2. **Open your Copilot** and Navigate to the **Deploy** section to retrieve the integration token.
+2. **Open your Copilot** and Navigate to the **Deploy** section to retrieve the integration token. Refer to the [Mobile SDK Documentation](https://platform.copilot.live/docs/deployments/mobilesdk/) for more details.
 
 ## Features
 
@@ -54,7 +54,7 @@ To integrate the Copilot SDK to your project:
   
   - [Maven central repository](https://central.sonatype.com/artifact/live.copilot.client/sdk/versions)
     
-   For e.g. implementation 'live.copilot.client:sdk:1.1.0' 
+   For e.g. implementation 'live.copilot.client:sdk:1.0.0' 
 
 ### Initialization
 
