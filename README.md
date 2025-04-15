@@ -97,6 +97,16 @@ fun initializeCopilotSDK() {
 
 ```
 
+### Navigation Setup
+If your application uses Jetpack Navigation for fragment communication or transactions, you must include the CoPilot navigation graph in your app’s main navigation graph.
+This ensures seamless integration with CoPilot's screens.
+
+Add the following line inside your root `<navigation>` element:
+```kotlin
+    <include app:graph="@navigation/copilot_nav" />
+```
+If your app does not use Jetpack Navigation, no changes are required. The CoPilot SDK will handle all necessary fragment transactions internally.
+
 ## Permissions
 
 #### Microphone Permission
