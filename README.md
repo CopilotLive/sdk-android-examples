@@ -70,7 +70,8 @@ fun initializeCopilotSDK() {
          phoneNumber = "", // The user's phone number
          profileImageUrl = "", // URL for the user's profile image
          emailAddress = "", // The user's email address
-         userIdentifier = "" // A unique identifier for the user
+         userIdentifier = "", // A unique identifier for the user
+         additionalFields = null // Additional user information
       )
         
       // Define appearance settings for the Copilot UI
@@ -85,7 +86,8 @@ fun initializeCopilotSDK() {
       val copilotConfig = CopilotConfig(
           token = "YOUR_COPILOT_TOKEN", // Replace with your actual Copilot token
           user = userData, // Pass the user data
-          appearance = appearance // Pass the appearance settings
+          appearance = appearance, // Pass the appearance settings
+          options = null // Additional options for the Copilot
       )
         
       // Initialize the Copilot SDK with the configuration
