@@ -1,6 +1,8 @@
 
 # Copilot SDK for Android
 
+[![Maven Central](https://img.shields.io/maven-central/v/live.copilot.client/sdk.svg?label=latest%20version)](https://central.sonatype.com/artifact/live.copilot.client/sdk)
+
 ## Overview
 
 The Copilot SDK is a robust framework designed for seamless integration into Android applications, offering a streamlined experience for developers. The minimum deployment target SDK is 21.
