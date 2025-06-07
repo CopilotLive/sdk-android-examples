@@ -3,17 +3,25 @@ package com.example.copilotapp
 import CopilotAppearance
 import CopilotConfig
 import CopilotUser
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import live.copilot.client.Copilot
-import live.copilot.client.ui.CopilotAPIResponseCallback
+import live.copilot.client.helper.SafeOptions
+import live.copilot.client.helper.event.TelemetryEvent
+import live.copilot.client.helper.event.TelemetryObserverConfig
+import live.copilot.client.helper.event.observeAllTelemetry
+import live.copilot.client.helper.event.observeTelemetry
+import live.copilot.client.helper.event.observeTelemetrySection
+import live.copilot.client.ui.CopilotCallback
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     private var navController: NavController? = null
-    private var apiResponseCallback: CopilotAPIResponseCallback? = null
+    private var copilotCallback: CopilotCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +32,23 @@ class MainActivity : AppCompatActivity() {
          **/
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
 
+        if (Timber.treeCount == 0) {
+            Timber.plant(Timber.DebugTree())
+        }
+
+
         /**
          * Initialize the Copilot SDK
          **/
         initCopilot()
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     /**
@@ -42,27 +63,57 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initCopilot() {
 
-        apiResponseCallback = object : CopilotAPIResponseCallback {
+        observeAllTelemetry { event ->
+            Timber.tag("observeAllTelemetry").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+        }
+
+        observeTelemetry<TelemetryEvent.WidgetEvent.Close>{ event ->
+            Timber.tag("observeTelemetry").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+        }
+
+        TelemetryObserverConfig.onUnhandledException = { throwable ->
+            Timber.tag("Telemetry").e(throwable, "Global error")
+            // Forward to Crashlytics, Sentry, etc.
+        }
+
+        observeTelemetrySection(
+            onWidget =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional
+            onUser =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional
+            onCall =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional,
+            onAssistant =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional
+            onCtaClick =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional
+            onOther =  { event ->
+                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+            }, // optional
+            onError =  { error ->
+                Timber.tag("observeTelemetrySection").e("Event: $error Message: ${error.message}")
+            } // optional
+        )
+
+        copilotCallback = object : CopilotCallback {
             /**
              * Called when the app's custom toolbar should be hidden.
              */
             override fun hideToolBar() {
-                //TODO("Not yet implemented")
+                Timber.tag("TAG").d("hideToolBar: ")
             }
 
             /**
              * Called when the conversation fails to load.
              * @param error The error message describing the failure.
              */
-            override fun onConversationFailedToLoad(error: String) {
-                //TODO("Not yet implemented")
-            }
-
-            /**
-             * Called when the conversation has successfully loaded.
-             */
-            override fun onConversationLoaded() {
-                //TODO("Not yet implemented")
+            override fun onError(error: String) {
+                Timber.tag("TAG").e("onConversationFailedToLoad: $error")
             }
 
             /**
@@ -70,27 +121,28 @@ class MainActivity : AppCompatActivity() {
              * @param url The deep link URL received.
              */
             override fun onDeepLinkReceived(url: String) {
-                //TODO("Not yet implemented")
+                Timber.tag("TAG").e("onDeepLinkReceived: $url")
             }
+
         }
 
         // Initialize Copilot SDK with configuration settings.
         Copilot.initialize(
             CopilotConfig(
-                token = "", // Copilot Token
+                token = "",
                 user = CopilotUser(
-                    fullName = "", // User's full name
-                    phoneNumber = "", // User's phone number
-                    profileImageUrl = "", // Profile image URL
-                    emailAddress = "", // User's email address
-                    userIdentifier = "" // Unique user identifier
+                    fullName = "", // The full name of the user
+                    emailAddress = "",
+                    phoneNumber = "",
+                    profilePicURL = "",
+                    hostId = "",
                 ),
                 appearance = CopilotAppearance(
                     toolbarColor = "#FFFFFF",
                     backgroundColor = "#FFFFFF",
                     toolbarTintColor = "#000000",
                     titleText = "Copilot AI" // Title text for the Copilot interface,
-                )
+                ),
             )
         )
 
@@ -110,11 +162,29 @@ class MainActivity : AppCompatActivity() {
      * 2. Passes the callback interface to handle events triggered by the SDK.
      */
     fun openChat(message: String? = null) {
-        Copilot.showConversations(
+        Copilot.open(
             navController = navController,
-            callback = apiResponseCallback,
+            callback = copilotCallback,
             initialMessage = message
         )
+    }
+
+    fun setContext() {
+        val option = SafeOptions()
+
+        option.putAll(
+            mapOf(
+                "description" to "User is one profile screen",
+                "name" to "User name",
+                "email" to "email",
+            )
+        )
+
+        Copilot.setContext(option)
+    }
+
+    fun unSetContext(){
+        Copilot.unSetContext()
     }
 
     /**
@@ -128,7 +198,7 @@ class MainActivity : AppCompatActivity() {
     fun makeCall() {
         Copilot.makeCall(
             navController = navController,
-            callback = apiResponseCallback,
+            callback = copilotCallback,
         )
     }
 
@@ -140,13 +210,19 @@ class MainActivity : AppCompatActivity() {
     fun login() {
         val user = CopilotUser(
             fullName = "", // The full name of the user
-            phoneNumber = "", // The user's phone number
-            profileImageUrl = "", // URL for the user's profile image
-            emailAddress = "", // The user's email address
-            userIdentifier = "" // A unique identifier for the user
+            emailAddress = "",
+            hostId = "",
+            phoneNumber = "",
+            profilePicURL = "",
+            additionalFields = SafeOptions().apply {
+                putAll(mapOf(
+                    "description" to "User is one profile screen",
+                ))
+            }
         )
+        Copilot.setUser(user)
         // Notify Copilot SDK about the authenticated user's details
-        Copilot.notifyLoginSuccess(user)
+        //Copilot.notifyLoginSuccess(user)
     }
 
     /**
