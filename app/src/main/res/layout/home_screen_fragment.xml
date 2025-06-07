@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/text"
@@ -11,58 +13,69 @@
         app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/red"
         android:layout_marginTop="@dimen/dimen_36dp"
+        android:padding="@dimen/dimen_16dp"
         android:text="@string/welcome_to_home_screen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/chatButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/open_chat"
+        android:padding="@dimen/dimen_16dp"
         android:textColor="@color/white"
-        android:backgroundTint="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/callButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:backgroundTint="@color/red" />
 
     <Button
         android:id="@+id/callButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/make_call"
+        android:padding="@dimen/dimen_16dp"
         android:visibility="visible"
         android:textColor="@color/white"
-        android:backgroundTint="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/chatButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:backgroundTint="@color/red" />
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="login"
+        android:text="@string/login"
+        android:padding="@dimen/dimen_16dp"
         android:visibility="visible"
         android:textColor="@color/white"
-        android:backgroundTint="@color/red"
-        android:layout_marginBottom="@dimen/dimen_36dp"
-        app:layout_constraintStart_toStartOf="@+id/logoutButton"
-        app:layout_constraintBottom_toTopOf="@+id/logoutButton" />
+        android:backgroundTint="@color/red" />
+
+    <Button
+        android:id="@+id/setContextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/setcontext"
+        android:padding="@dimen/dimen_16dp"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/red" />
+
+    <Button
+        android:id="@+id/unSetContextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/unsetcontext"
+        android:padding="@dimen/dimen_16dp"
+        android:visibility="visible"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/red" />
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="logout"
+        android:text="@string/logout"
+        android:padding="@dimen/dimen_16dp"
         android:visibility="visible"
         android:textColor="@color/white"
-        android:layout_marginBottom="@dimen/dimen_36dp"
-        android:backgroundTint="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:backgroundTint="@color/red"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
