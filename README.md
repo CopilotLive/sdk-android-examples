@@ -9,6 +9,7 @@ The Copilot SDK is a robust framework designed for seamless integration into And
 ## SDK Requirements
 
 1. **Login** to the [Copilot Platform](https://platform.copilot.live/)
+
 2. **Open your Copilot** and Navigate to the **Deploy** section to retrieve the integration token. Refer to the [Mobile SDK Documentation](https://platform.copilot.live/docs/deployments/mobilesdk/) for more details.
 
 ## Features
@@ -18,7 +19,7 @@ The Copilot SDK is a robust framework designed for seamless integration into And
 - Modular and extensible design.
 - Lightweight and optimized for performance.
 - Provides **conversation interfaces**, **deep linking capabilities**, and **voice call assistance**.
-- Supports **user authentication**, **telemetry observability**, and **UI appearance customization**.
+- Supports **user authentication** and **UI appearance customization**.
 
 ## Requirements
 
@@ -31,291 +32,323 @@ The Copilot SDK is a robust framework designed for seamless integration into And
 
 To integrate the Copilot SDK to your project:
 
-1. Add the Maven URL to the root `build.gradle`:
+1. Add the maven URL to the root `build.gradle` (project/build.gradle)
 
-```gradle
-allprojects {
+   
+```ruby
+   allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
     }
-}
+   }
 ```
-
-2. Add the following dependency to your app module's `build.gradle` file:
-
-```gradle
-dependencies {
+   
+2. Add the following dependency to your app module's `build.gradle` file (project/app/build.gradle):
+   ```ruby
+   dependencies {
     implementation 'live.copilot.client:sdk:{{latest-version}}'
-}
-```
+   }
+   ```
 
-Replace `{{latest-version}}` with the latest version from:
-- [Maven Central](https://central.sonatype.com/artifact/live.copilot.client/sdk/versions)
+   Replace {{latest-version}} with the latest version of the SDK from the link below
+  
+  - [Maven central repository](https://central.sonatype.com/artifact/live.copilot.client/sdk/versions)
+    
+   For e.g. implementation 'live.copilot.client:sdk:1.0.0' 
 
 ### Initialization
 
-Add the following inside your `MainActivity` or early app lifecycle method:
+To initialize the Copilot SDK, add the following code in your onCreate of the `MainActivity` or at the start of your app lifecycle:
 
 ```kotlin
-val userData = CopilotUser(
-    fullName = "",
-    phoneNumber = "",
-    profileImageUrl = "",
-    emailAddress = "",
-    userIdentifier = "",
-    additionalFields =  Map<String, Any>
-)
+import Copilot
 
-val appearance = CopilotAppearance(
-    toolbarColor = "#E9FBFB",
-    backgroundColor = "#E9FBFB",
-    toolbarTintColor = "#000000",
-    titleText = "Copilot Assistant"
-)
+fun initializeCopilotSDK() {
+     // Create a user object with placeholder data. Replace these values with real user data.
+     val userData = CopilotUser(
+         fullName = "", // The full name of the user
+         phoneNumber = "", // The user's phone number
+         profileImageUrl = "", // URL for the user's profile image
+         emailAddress = "", // The user's email address
+         userIdentifier = "", // A unique identifier for the user
+         additionalFields = null // Additional user information
+      )
+        
+      // Define appearance settings for the Copilot UI
+      val appearance = CopilotAppearance(
+          toolbarColor = "#E9FBFB", // Background color for the toolbar bar
+          backgroundColor = "#E9FBFB", // Background for the main UI
+          toolbarTintColor = "#000000", // Tint color for the toolbar icons
+          titleText = "Copilot Assistant" // Title displayed in the tool bar
+      )
+        
+      // Create a configuration object with the token, user data, and appearance settings
+      val copilotConfig = CopilotConfig(
+          token = "YOUR_COPILOT_TOKEN", // Replace with your actual Copilot token
+          user = userData, // Pass the user data
+          appearance = appearance, // Pass the appearance settings
+          options = null // Additional options for the Copilot
+      )
+        
+      // Initialize the Copilot SDK with the configuration
+      Copilot.initialize(config = copilotConfig)
 
-val config = CopilotConfig(
-    token = "YOUR_COPILOT_TOKEN",
-    user = userData,
-    appearance = appearance,
-    option = Map<String, Any>
-)
+      // Assign the current activity to Copilot before showing the conversations.
+      Copilot.setActivity(this)
+}
 
-Copilot.initialize(config = config)
-Copilot.setActivity(this)
 ```
 
-### Navigation Setup (Optional)
+### Navigation Setup
+If your application uses Jetpack Navigation for fragment communication or transactions, you must include the CoPilot navigation graph in your app’s main navigation graph.
+This ensures seamless integration with CoPilot's screens.
 
-If using Jetpack Navigation:
-
-```xml
-<include app:graph="@navigation/copilot_nav" />
+Add the following line inside your root `<navigation>` element:
+```kotlin
+    <include app:graph="@navigation/copilot_nav" />
 ```
+If your app does not use Jetpack Navigation, no changes are required. The CoPilot SDK will handle all necessary fragment transactions internally.
 
 ## Permissions
 
-Add to your `AndroidManifest.xml`:
+#### Microphone Permission
 
-```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
+To ensure proper functionality, you must add the following permissions to your AndroidManifest.xml file:
+
+```ruby
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 ```
 
-## User Management
+
+### User Management
 
 ```kotlin
 val user = CopilotUser(
-    hostId = "",
-    fullName = "",
-    phoneNumber = "",
-    profileImageUrl = "",
-    emailAddress = "",
+    fullName: "",        // The full name of the user
+    phoneNumber: "",     // The user's phone number
+    profileImageUrl: "", // URL for the user's profile image
+    emailAddress: "",    // The user's email address
+    userIdentifier: ""   // A unique identifier for the user
+)
+```
+#### Setting the User in Copilot SDK
+The Copilot SDK provides multiple ways to set the user for tracking and personalization purposes. You can choose the method that best fits your app's workflow:
+
+#### 1. Set the User During Initialization
+You can set the user directly when initializing the Copilot SDK. This is ideal when the user information is readily available at the time of app launch or SDK setup.
+
+```kotlin
+Copilot.initialize(
+    config = CopilotConfig(
+        user = user  // Providing user details in config
+    )
 )
 ```
 
-Set user:
+#### 2. Set the User After Initialization
+If the user information becomes available later in the app lifecycle, you can set the user after the SDK has already been initialized.
 
 ```kotlin
 Copilot.setUser(user)
+```
+
+#### 3. Set the User on Login Success
+When a user successfully logs into your app, you can notify the SDK to set the user. This ensures that the user's session is correctly tracked from the moment they log in.
+
+```kotlin
 Copilot.notifyLoginSuccess(user)
 ```
+This approach is particularly helpful in apps where user login is optional or delayed until a specific interaction.
 
-UnsetUser:
+#### Logging Out
 
-```kotlin
-Copilot.unsetUser()
-```
-
-Set Context:
+To log out the current user:
 
 ```kotlin
-const val context = Map<String, Any>
-Copilot.setContext(context)
+Copilot.logout()
 ```
 
-UnsetUser:
+### Customizing Appearance
 
-```kotlin
-Copilot.unsetUser()
-```
-
-## Custom Appearance
+To set a custom appearance:
 
 ```kotlin
 val appearance = CopilotAppearance(
-    toolbarColor = "#E9FBFB",
-    backgroundColor = "#E9FBFB",
-    toolbarTintColor = "#000000",
-    titleText = "Copilot Assistant"
-)
+                   toolbarColor = "#E9FBFB", // Background for the toolbar bar
+                   backgroundColor = "#E9FBFB", // Background for the copilot view
+                   toolbarTintColor = "#000000", // Tint color for the toolbar icons
+                   titleText = "Copilot Assistant" // Title displayed in the toolbar bar
+        )
 Copilot.setAppearance(appearance)
 ```
 
-## Open Conversation
+### Set the Activity Context
+
+Assigns the hosting activity's context to the Copilot SDK. This is required to ensure proper integration with the Copilot screen. The provided context must be an instance of AppCompatActivity.
 
 ```kotlin
-Copilot.open(
-    navController = navController,
-    callback = copilotCallback,
-    initialMessage = "Hi there!"
-)
+   Copilot.setActivity(this@MainActivity)
 ```
 
-## Close Conversation
+### Conversations
+
+#### CopilotAPIResponseCallback Implementation
+
+To handle events and responses from the CoPilot SDK, implement the CopilotAPIResponseCallback interface. This callback provides methods to manage the conversation lifecycle, deep links, and UI changes.
 
 ```kotlin
-Copilot.close()
-```
-
-## Make Call
-
-```kotlin
-Copilot.makeCall(
-    navController = navController,
-    callback = copilotCallback
-)
-```
-
-## Telemetry & Analytics
-
-The SDK provides comprehensive telemetry and analytics capabilities to help you monitor and understand user interactions with the Copilot assistant. This section covers how to observe and handle various telemetry events.
-
-The SDK provides a sealed class `TelemetryEvent` that categorizes different types of events that can be observed:
-
-### Event Categories
-
-- **WidgetEvent**: Events related to the Copilot widget UI
-  - `Open`: When widget is opened
-  - `Close`: When widget is closed
-  - `Minimize`: When widget is minimized
-  - `Maximize`: When widget is maximized
-
-- **UserEvent**: Events related to user actions
-  - `MessageSent`: When user sends a message
-  - `MessageRead`: When user reads a message
-  - `InputStarted`: When user starts typing
-  - `InputEnded`: When user stops typing
-
-- **AssistantEvent**: Events related to assistant actions
-  - `MessageReceived`: When assistant sends a message
-  - `Typing`: When assistant is typing
-  - `SuggestionDisplayed`: When suggestions are shown
-  - `ActionExecuted`: When assistant executes an action
-
-- **CallEvent**: Events related to voice calls
-  - `Started`: When call begins
-  - `Ended`: When call ends
-  - `Connected`: When call connects
-  - `Disconnected`: When call disconnects
-  - `Failed`: When call fails
-
-- **CTAEvent**: Events related to Call-To-Action interactions
-  - `Clicked`: When a CTA button is clicked
-  - `Displayed`: When CTAs are displayed
-
-### Observing Events
-
-```kotlin
-// This is to observe all telemetry events
-observeAllTelemetry { event ->
-    Timber.tag("Telemetry-All").d("${event.name}: ${event.parameters.raw()}")
-}
-
-// Observe specific telemetry event for widget close
-observeTelemetry<TelemetryEvent.WidgetEvent.Close> { event ->
-    // Log the event name and parameters when widget is closed
-    Timber.tag("Telemetry-Close").d("${event.name}: ${event.parameters.raw()}")
-}
-
-observeTelemetrySection(
-    onWidget = { event -> 
-        when (event) {
-            is TelemetryEvent.WidgetEvent.Open -> Timber.d("Widget opened")
-            is TelemetryEvent.WidgetEvent.Close -> Timber.d("Widget closed") 
-            else -> Timber.d("Widget event: ${event.name}")
-        }
-    },
-    onUser = { event ->
-        when (event) {
-            is TelemetryEvent.UserEvent.MessageSent -> Timber.d("User sent message")
-            is TelemetryEvent.UserEvent.MessageRead -> Timber.d("User read message")
-            else -> Timber.d("User event: ${event.name}")
-        }
-    },
-    onAssistant = { event ->
-        when (event) {
-            is TelemetryEvent.AssistantEvent.MessageReceived -> Timber.d("Assistant message received")
-            is TelemetryEvent.AssistantEvent.Typing -> Timber.d("Assistant is typing")
-            else -> Timber.d("Assistant event: ${event.name}")
-        }
-    },
-    onCall = { event ->
-        when (event) {
-            is TelemetryEvent.CallEvent.Started -> Timber.d("Call started")
-            is TelemetryEvent.CallEvent.Ended -> Timber.d("Call ended")
-            else -> Timber.d("Call event: ${event.name}")
-        }
-    },
-    onCtaClick = { event -> Timber.d("CTA clicked: ${event.name}") },
-    onOther = { event -> Timber.d("Other telemetry event: ${event.name}") },
-    onError = { err -> 
-        Timber.e(err, "Telemetry error occurred")
-        // Additional error handling if needed
-    }
-)
-
-TelemetryObserverConfig.onUnhandledException = { exception ->
-    // Global error handler for unhandled telemetry exceptions
-    Timber.e(exception, "Unhandled Telemetry Exception Occurred")
-    // Add your custom error handling logic here
-}
-```
-
-## Callback Handling
-
-```kotlin
-val copilotCallback = object : CopilotCallback {
-    override fun hideToolBar() {
-        Timber.d("Toolbar hidden")
+val copilotAPIResponseCallback = object : CopilotAPIResponseCallback {
+    
+    // Called when the conversation UI is successfully loaded
+    override fun onConversationLoaded() {
+        // Handle UI or logic when the conversation is ready
+        println("Conversation successfully loaded.")
     }
 
-    override fun onError(error: String) {
-        Timber.e("Conversation load error: $error")
+    // Called when the conversation fails to load
+    override fun onConversationFailedToLoad(error: String) {
+        // Handle error scenarios such as network issues or invalid configurations
+        println("Failed to load conversation: $error")
     }
 
+    // Called when a deep link is received within the conversation
     override fun onDeepLinkReceived(url: String) {
-        Timber.d("Deep link received: $url")
+        // Handle the received deep link URL
+        println("Deep link received: $url")
+    }
+
+    // Called to hide your app's custom toolbar if needed
+    override fun hideToolBar() {
+        // Implement toolbar hiding logic here if required
+        println("Toolbar should be hidden.")
     }
 }
+
+```
+Once implemented, pass the copilotAPIResponseCallback instance when invoking `CoPilotSDK.showConversations()` to handle these events.
+
+#### Displaying Conversations
+
+This feature enables users to interact with the Copilot assistant through a text-based conversation interface. Users can send and receive messages within the app, making it easy to communicate with the assistant for support, guided workflows, or general assistance. The conversation history is maintained, allowing users to resume past interactions seamlessly. This ensures a smooth and real-time messaging experience without switching between different platforms.
+
+```kotlin
+
+fun showConversation() {
+  CoPilotSDK.showConversations(
+      navController = navController,        // Required if using a navigation graph
+      fragmentManager = fragmentManager,    // Required if not using a navigation graph
+      containerId = containerId,            // Layout container ID for the fragment
+      callBack = copilotAPIResponseCallback,       // To handle API responses
+      transactionType = TransactionType.REPLACE, // Default transaction type
+      initialMessage = "Initial Message"           // Optional initial message
+      initialValue = "",                   //Optional initial value to provide context or predefined input for the conversation.
+  )
+}
+
 ```
 
-## API Reference Summary
+#### Make a Call
 
-| Method | Description |
-|--------|-------------|
-| `initialize(config)` | Initialize SDK with token, user, and UI config |
-| `setActivity(activity)` | Set current activity context |
-| `setUser(user)` | Set user dynamically |
-| `notifyLoginSuccess(user)` | Notify SDK of a successful login |
-| `setAppearance(appearance)` | Update Copilot UI styling |
-| `open()` | Launch conversation UI |
-| `makeCall()` | Start voice-based assistant call |
-| `observeTelemetry*()` | Observe telemetry events |
-| `TelemetryObserverConfig.onUnhandledException` | Global error fallback for telemetry |
+This feature allows users to communicate with the Copilot assistant using voice instead of text. It is useful for hands-free interactions, accessibility needs, or situations where speaking is more convenient than typing. Users can initiate a real-time voice conversation within the app, making it easy to get assistance without manually typing queries. The call feature provides a seamless experience by enabling direct access to voice-based support without additional steps.
 
----
+To enable this feature, ensure that microphone access permission is added in `AndroidManifest.xml`.
 
-## Full Example (Client Integration)
+```kotlin
+fun makeCall() {
+  CoPilotSDK.makeCall(
+      navController = navController,        // Required if using a navigation graph
+      fragmentManager = fragmentManager,    // Required if not using a navigation graph
+      containerId = containerId,            // Layout container ID for the fragment
+      callBack = copilotAPIResponseCallback,       // To handle API responses
+      transactionType = TransactionType.REPLACE, // Default transaction type
+  )
+}
 
-See `MainActivity.kt` in your repo for a complete working example integrating telemetry observers, conversation UI, and voice call. This ensures full lifecycle management and feature exposure from Copilot SDK.
+```
 
-For additional setup help, refer to [Mobile SDK Docs](https://platform.copilot.live/docs/deployments/mobilesdk/).
+## API Reference
 
----
+### `initialize`
 
-For issues or feature requests, please reach out via your Copilot dashboard support.
+Initializes the SDK with the provided configuration.
 
----
+- **Parameters:**
+  - `config` (CopilotConfig): The configuration containing the token, user details, and UI appearance.
+ 
+### `setActivity`
 
-© Copilot.live – All rights reserved.
+Before displaying the conversation interface, you need to set the current activity using `Copilot.setActivity()`. This step is essential for the SDK to properly handle UI interactions and lifecycle events.
+
+- **Parameters:**
+  - `context` (Context): context of the current activity instance in which the conversation will be displayed.
+ 
+### `setUser`
+
+Sets the authenticated user for the SDK.
+
+- **Parameters:**
+  - `user` (CopilotUser): The user object to be set.
+
+### `logout`
+
+Logs out the currently authenticated user.
+
+### `notifyLoginSuccess`
+
+Notifies the SDK of a successful user login.
+
+- **Parameter:**
+  - `user` (CopilotUser): The user object representing the successfully logged-in user.
+
+### `setAppearance`
+
+Sets the UI appearance for the SDK.
+
+- **Parameter:**
+  - `appearance` (CopilotAppearance): The appearance object to be set.
+ 
+### `refreshView`
+ 
+Refreshes the View used by the Copilot SDK. Call this method to reload the content in the WebView.    
+
+### `makeCall`
+
+Initiates a voice call through the Copilot SDK.
+
+
+- **Parameters:**
+  - `navController` (NavController): A `NavController` for navigating within a NavGraph. Use this when using navigation components. (Optional).
+  - `fragmentManager` (FragmentManager?): A `FragmentManager` for adding the WebView fragment to an activity. Required if `NavController` is not used. (Optional).
+  -  `containerId` (Int?): The container view ID where the WebView fragment should be added. Required when using `FragmentManager`. (Optional)
+  - `callback` (CopilotAPIResponseCallback?): A callback for receiving API responses from the Copilot SDK.
+  - `transactionType` (TransactionType): The type of fragment transaction (`TransactionType.ADD` or `TransactionType.REPLACE`). Defaults to `TransactionType.REPLACE`.
+
+
+### `showConversations`
+
+Opens the conversation interface provided by the Copilot SDK.
+
+- **Parameters:**
+  - `navController` (NavController): A `NavController` for navigating within a NavGraph. Use this when using navigation components. (Optional).
+  - `fragmentManager` (FragmentManager?): A `FragmentManager` for adding the WebView fragment to an activity. Required if `NavController` is not used. (Optional).
+  -  `containerId` (Int?): The container view ID where the WebView fragment should be added. Required when using `FragmentManager`. (Optional)
+  - `callback` (CopilotAPIResponseCallback?): A callback for receiving API responses from the Copilot SDK.
+  - `transactionType` (TransactionType): The type of fragment transaction (`TransactionType.ADD` or `TransactionType.REPLACE`). Defaults to `TransactionType.REPLACE`.
+  - `initialMessage` (String?) : An optional message that will be displayed in the conversation interface.
+  - `initialValue` (String?) : An optional initial value to provide context or predefined input for the conversation.
+    
+
+## Troubleshooting
+
+### Common Issues
+
+- **Error: "Unsupported Android version"**
+  - Ensure that your app's minSdkVersion is set to 21 or later in your build.gradle file.
+- **Error: "Module not found"**
+  - Verify that the SDK dependency is correctly added in your build.gradle.
+- **Error: "Failed to load Copilot"**
+  - Ensure the configuration token is valid and accessible.
+- **Error: "No internet connection"**
+  - Check if the device has an active internet connection before initializing Copilot.
