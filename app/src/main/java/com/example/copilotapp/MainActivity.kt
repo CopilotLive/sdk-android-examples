@@ -4,17 +4,12 @@ import CopilotAppearance
 import CopilotConfig
 import CopilotUser
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import live.copilot.client.Copilot
 import live.copilot.client.helper.SafeOptions
 import live.copilot.client.helper.event.TelemetryEvent
-import live.copilot.client.helper.event.TelemetryObserverConfig
-import live.copilot.client.helper.event.observeAllTelemetry
-import live.copilot.client.helper.event.observeTelemetry
-import live.copilot.client.helper.event.observeTelemetrySection
 import live.copilot.client.ui.CopilotCallback
 import timber.log.Timber
 
@@ -63,43 +58,6 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initCopilot() {
 
-        observeAllTelemetry { event ->
-            Timber.tag("observeAllTelemetry").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-        }
-
-        observeTelemetry<TelemetryEvent.WidgetEvent.Close>{ event ->
-            Timber.tag("observeTelemetry").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-        }
-
-        TelemetryObserverConfig.onUnhandledException = { throwable ->
-            Timber.tag("Telemetry").e(throwable, "Global error")
-            // Forward to Crashlytics, Sentry, etc.
-        }
-
-        observeTelemetrySection(
-            onWidget =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional
-            onUser =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional
-            onCall =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional,
-            onAssistant =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional
-            onCtaClick =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional
-            onOther =  { event ->
-                Timber.tag("observeTelemetrySection").e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
-            }, // optional
-            onError =  { error ->
-                Timber.tag("observeTelemetrySection").e("Event: $error Message: ${error.message}")
-            } // optional
-        )
-
         copilotCallback = object : CopilotCallback {
             /**
              * Called when the app's custom toolbar should be hidden.
@@ -114,6 +72,11 @@ class MainActivity : AppCompatActivity() {
              */
             override fun onError(error: String) {
                 Timber.tag("TAG").e("onConversationFailedToLoad: $error")
+            }
+
+            override fun onReceiveTelemetry(event: TelemetryEvent) {
+                Timber.tag("onReceiveTelemetry")
+                    .e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
             }
 
             /**
@@ -183,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         Copilot.setContext(option)
     }
 
-    fun unSetContext(){
+    fun unSetContext() {
         Copilot.unSetContext()
     }
 
@@ -215,9 +178,11 @@ class MainActivity : AppCompatActivity() {
             phoneNumber = "",
             profilePicURL = "",
             additionalFields = SafeOptions().apply {
-                putAll(mapOf(
-                    "description" to "User is one profile screen",
-                ))
+                putAll(
+                    mapOf(
+                        "description" to "User is one profile screen",
+                    )
+                )
             }
         )
         Copilot.setUser(user)
