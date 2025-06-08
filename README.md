@@ -201,31 +201,23 @@ be observed:
 - **WidgetEvent**: Events related to the Copilot widget UI
   - `Open`: When widget is opened
   - `Close`: When widget is closed
-  - `Minimize`: When widget is minimized
-  - `Maximize`: When widget is maximized
+  - `load`: When widget is loaded
 
 - **UserEvent**: Events related to user actions
-  - `MessageSent`: When user sends a message
-  - `MessageRead`: When user reads a message
-  - `InputStarted`: When user starts typing
-  - `InputEnded`: When user stops typing
+  - `Message`: When user sends a message
+  - `MessageStop`: When user stop a message
 
 - **AssistantEvent**: Events related to assistant actions
-  - `MessageReceived`: When assistant sends a message
-  - `Typing`: When assistant is typing
-  - `SuggestionDisplayed`: When suggestions are shown
-  - `ActionExecuted`: When assistant executes an action
+  - `Message`: When assistant sends a message
+  - `Compoent`: When assistant send componet
+  - `Suggestion`: When suggestions are shown
 
 - **CallEvent**: Events related to voice calls
-  - `Started`: When call begins
-  - `Ended`: When call ends
   - `Connected`: When call connects
   - `Disconnected`: When call disconnects
-  - `Failed`: When call fails
 
 - **CTAEvent**: Events related to Call-To-Action interactions
   - `Clicked`: When a CTA button is clicked
-  - `Displayed`: When CTAs are displayed
 
 ### Observing Events
 
