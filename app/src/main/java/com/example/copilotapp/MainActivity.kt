@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                     emailAddress = "",
                     phoneNumber = "",
                     profilePicURL = "",
-                    hostId = "",
+                    userIdentifier = "",
                 ),
                 appearance = CopilotAppearance(
                     toolbarColor = "#FFFFFF",
@@ -211,7 +211,7 @@ class MainActivity : AppCompatActivity() {
         val user = CopilotUser(
             fullName = "", // The full name of the user
             emailAddress = "",
-            hostId = "",
+            userIdentifier = "",
             phoneNumber = "",
             profilePicURL = "",
             additionalFields = SafeOptions().apply {
