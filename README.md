@@ -1,6 +1,7 @@
 # Copilot SDK for Android
 
 [![Maven Central](https://img.shields.io/maven-central/v/live.copilot.client/sdk.svg?label=latest%20version)](https://central.sonatype.com/artifact/live.copilot.client/sdk)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CopilotLive/sdk-android-examples)
 
 ## Overview
 
