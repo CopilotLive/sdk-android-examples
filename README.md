@@ -1,5 +1,4 @@
 # Copilot SDK for Android
-
 [![Maven Central](https://img.shields.io/maven-central/v/live.copilot.client/sdk.svg?label=latest%20version)](https://central.sonatype.com/artifact/live.copilot.client/sdk)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CopilotLive/sdk-android-examples)
 
@@ -219,63 +218,8 @@ be observed:
 - **CTAEvent**: Events related to Call-To-Action interactions
   - `Clicked`: When a CTA button is clicked
 
-### Observing Events
-
-```kotlin
-// This is to observe all telemetry events
-observeAllTelemetry { event ->
-  Timber.tag("Telemetry-All").d("${event.name}: ${event.parameters.raw()}")
-}
-
-// Observe specific telemetry event for widget close
-observeTelemetry<TelemetryEvent.WidgetEvent.Close> { event ->
-  // Log the event name and parameters when widget is closed
-  Timber.tag("Telemetry-Close").d("${event.name}: ${event.parameters.raw()}")
-}
-
-observeTelemetrySection(
-  onWidget = { event ->
-    when (event) {
-      is TelemetryEvent.WidgetEvent.Open -> Timber.d("Widget opened")
-      is TelemetryEvent.WidgetEvent.Close -> Timber.d("Widget closed")
-      else -> Timber.d("Widget event: ${event.name}")
-    }
-  },
-  onUser = { event ->
-    when (event) {
-      is TelemetryEvent.UserEvent.MessageSent -> Timber.d("User sent message")
-      is TelemetryEvent.UserEvent.MessageRead -> Timber.d("User read message")
-      else -> Timber.d("User event: ${event.name}")
-    }
-  },
-  onAssistant = { event ->
-    when (event) {
-      is TelemetryEvent.AssistantEvent.MessageReceived -> Timber.d("Assistant message received")
-      is TelemetryEvent.AssistantEvent.Typing -> Timber.d("Assistant is typing")
-      else -> Timber.d("Assistant event: ${event.name}")
-    }
-  },
-  onCall = { event ->
-    when (event) {
-      is TelemetryEvent.CallEvent.Started -> Timber.d("Call started")
-      is TelemetryEvent.CallEvent.Ended -> Timber.d("Call ended")
-      else -> Timber.d("Call event: ${event.name}")
-    }
-  },
-  onCtaClick = { event -> Timber.d("CTA clicked: ${event.name}") },
-  onOther = { event -> Timber.d("Other telemetry event: ${event.name}") },
-  onError = { err ->
-    Timber.e(err, "Telemetry error occurred")
-    // Additional error handling if needed
-  }
-)
-
-TelemetryObserverConfig.onUnhandledException = { exception ->
-  // Global error handler for unhandled telemetry exceptions
-  Timber.e(exception, "Unhandled Telemetry Exception Occurred")
-  // Add your custom error handling logic here
-}
-```
+- **Other**: Events that are not explicitly mapped to known types
+  - `Other`: Triggered when the telemetry type does not match any predefined event category.
 
 ## Callback Handling
 
@@ -289,6 +233,11 @@ val copilotCallback = object : CopilotCallback {
     Timber.e("Conversation load error: $error")
   }
 
+  override fun onReceiveTelemetry(event: TelemetryEvent) {
+    Timber.tag("onReceiveTelemetry")
+      .e("Event: ${event.name} Parameters: ${event.parameters.raw()}")
+  }
+
   override fun onDeepLinkReceived(url: String) {
     Timber.d("Deep link received: $url")
   }
@@ -297,18 +246,16 @@ val copilotCallback = object : CopilotCallback {
 
 ## API Reference Summary
 
-| Method                                         | Description                                    |
-|------------------------------------------------|------------------------------------------------|
-| `initialize(config)`                           | Initialize SDK with token, user, and UI config |
-| `setActivity(activity)`                        | Set current activity context                   |
-| `setUser(user)`                                | Set user dynamically                           |
-| `notifyLoginSuccess(user)`                     | Notify SDK of a successful login               |
-| `setAppearance(appearance)`                    | Update Copilot UI styling                      |
-| `open()`                                       | Launch conversation UI                         |
-| `makeCall()`                                   | Start voice-based assistant call               |
-| `observeTelemetry*()`                          | Observe telemetry events                       |
-| `TelemetryObserverConfig.onUnhandledException` | Global error fallback for telemetry            |
-
+| Method                                        | Description                                    |
+|-----------------------------------------------|------------------------------------------------|
+| `initialize(config)`                          | Initialize SDK with token, user, and UI config |
+| `setActivity(activity)`                       | Set current activity context                   |
+| `setUser(user)`                               | Set user dynamically                           |
+| `notifyLoginSuccess(user)`                    | Notify SDK of a successful login               |
+| `setAppearance(appearance)`                   | Update Copilot UI styling                      |
+| `open()`                                      | Launch conversation UI                         |
+| `makeCall()`                                  | Start voice-based assistant call               |
+| `onReceiveTelemetry()`                        | Observe telemetry events                       |
 ---
 
 ## Full Example (Client Integration)
