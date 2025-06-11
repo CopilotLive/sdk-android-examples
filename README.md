@@ -209,6 +209,7 @@ be observed:
 - **AssistantEvent**: Events related to assistant actions
   - `Message`: When assistant sends a message
   - `Compoent`: When assistant send componet
+  - `CompoentItemView`: When assistant send viewd item componet
   - `Suggestion`: When suggestions are shown
 
 - **CallEvent**: Events related to voice calls
