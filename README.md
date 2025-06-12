@@ -132,7 +132,7 @@ Copilot.notifyLoginSuccess(user)
 UnsetUser:
 
 ```kotlin
-Copilot.unsetUser()
+Copilot.logout()
 ```
 
 Set Context:
@@ -142,10 +142,10 @@ const val context = Map<String, Any>
 Copilot.setContext(context)
 ```
 
-UnsetUser:
+UnsetContext:
 
 ```kotlin
-Copilot.unsetUser()
+Copilot.unsetContext()
 ```
 
 ## Custom Appearance
