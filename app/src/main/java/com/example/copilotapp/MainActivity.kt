@@ -109,9 +109,6 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        // Assign the current activity to Copilot and show the conversations.
-        Copilot.setActivity(this)
-
     }
 
 
