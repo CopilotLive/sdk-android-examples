@@ -1,6 +1,6 @@
 # Copilot SDK for Android
-[![Maven Central](https://img.shields.io/maven-central/v/live.copilot.client/sdk.svg?label=latest%20version)](https://central.sonatype.com/artifact/live.copilot.client/sdk)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CopilotLive/sdk-android-examples)
+
+[![Maven Central](https://img.shields.io/maven-central/v/live.copilot.client/sdk.svg?label=latest%20version)](https://central.sonatype.com/artifact/live.copilot.client/sdk) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CopilotLive/sdk-android-examples)
 
 ## Overview
 
@@ -89,7 +89,6 @@ val config = CopilotConfig(
 )
 
 Copilot.initialize(config = config)
-Copilot.setActivity(this)
 ```
 
 ### Navigation Setup (Optional)
@@ -208,8 +207,7 @@ be observed:
 
 - **AssistantEvent**: Events related to assistant actions
   - `Message`: When assistant sends a message
-  - `Compoent`: When assistant send componet
-  - `CompoentItemView`: When assistant send viewd item componet
+  - `Compoent`: When assistant send Compoent
   - `Suggestion`: When suggestions are shown
 
 - **CallEvent**: Events related to voice calls
@@ -247,16 +245,15 @@ val copilotCallback = object : CopilotCallback {
 
 ## API Reference Summary
 
-| Method                                        | Description                                    |
-|-----------------------------------------------|------------------------------------------------|
-| `initialize(config)`                          | Initialize SDK with token, user, and UI config |
-| `setActivity(activity)`                       | Set current activity context                   |
-| `setUser(user)`                               | Set user dynamically                           |
-| `notifyLoginSuccess(user)`                    | Notify SDK of a successful login               |
-| `setAppearance(appearance)`                   | Update Copilot UI styling                      |
-| `open()`                                      | Launch conversation UI                         |
-| `makeCall()`                                  | Start voice-based assistant call               |
-| `onReceiveTelemetry()`                        | Observe telemetry events                       |
+| Method                      | Description                                    |
+|-----------------------------|------------------------------------------------|
+| `initialize(config)`        | Initialize SDK with token, user, and UI config |
+| `setUser(user)`             | Set user dynamically                           |
+| `notifyLoginSuccess(user)`  | Notify SDK of a successful login               |
+| `setAppearance(appearance)` | Update Copilot UI styling                      |
+| `open()`                    | Launch conversation UI                         |
+| `makeCall()`                | Start voice-based assistant call               |
+| `onReceiveTelemetry()`      | Observe telemetry events                       |
 ---
 
 ## Full Example (Client Integration)
