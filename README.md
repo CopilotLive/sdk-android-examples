@@ -106,8 +106,8 @@ Add to your `AndroidManifest.xml`:
 
 ```xml
 
-<uses-permission android:name="android.permission.INTERNET" /><uses-permission
-android:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permissionandroid:name="android.permission.RECORD_AUDIO" />
 ```
 
 ## User Management
