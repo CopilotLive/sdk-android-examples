@@ -66,11 +66,11 @@ Add the following inside your `MainActivity` or early app lifecycle method:
 
 ```kotlin
 val userData = CopilotUser(
-  fullName = "", // mandatory
-  phoneNumber = "", 
-  profileImageUrl = "",
-  emailAddress = "", // mandatory
   userIdentifier = "", // mandatory
+  fullName = "", // mandatory
+  emailAddress = "", // Either email or phone is required
+  phoneNumber = "", // Either email or phone is required
+  profileImageUrl = "",
   additionalFields = Map<String, Any>
 )
 
