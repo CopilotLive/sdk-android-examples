@@ -26,6 +26,75 @@ offering a streamlined experience for developers. The minimum deployment target 
 - Supports **user authentication**, **telemetry observability**, and **UI appearance customization
   **.
 
+## Dynamic Tool Registration with LLM
+
+The Copilot SDK allows you to dynamically register and unregister custom tools (actions) that the LLM can invoke during a conversation. This enables you to extend the assistant's capabilities at runtime.
+
+### Registering Tools
+
+You can register a tool by creating a `CopilotTool` and passing it to `Copilot.registerTool`:
+
+```kotlin
+val addToCartTool = CopilotTool(
+    name = "add_to_cart",
+    description = "Add a product to the cart",
+    parameters = CopilotSchema(
+        properties = mapOf(
+            "product_id" to CopilotSchemaField(
+                type = "string",
+                description = "The ID of the product"
+            ),
+            "quantity" to CopilotSchemaField(
+                type = "number",
+                description = "How many units to add"
+            )
+        ),
+        required = listOf("product_id", "quantity")
+    ),
+    handler = { params ->
+        Timber.tag("TAG").e("add_to_cart: $params")
+        val productId = params?.get("product_id") as? String
+            ?: return@CopilotTool CopilotToolResult(false, "Missing product_id")
+        val quantity = (params["quantity"] as? Number)?.toInt() ?: 1
+        CopilotToolResult(true, "Added $quantity of $productId to cart")
+    }
+)
+
+val openCartTool = CopilotTool(
+    name = "open_cart",
+    description = "Opens the user's cart screen",
+    handler = { params ->
+        Timber.tag("TAG").e("open_cart: $params")
+        CopilotToolResult(true, "Cart opened successfully")
+    }
+)
+
+Copilot.registerTool(addToCartTool)
+Copilot.registerTool(openCartTool)
+```
+
+### Unregistering Tools
+
+To remove a single tool:
+
+```kotlin
+Copilot.unregisterTool("add_to_cart")
+```
+
+To remove multiple tools:
+
+```kotlin
+Copilot.unregisterTools(listOf("add_to_cart", "open_cart"))
+```
+
+To remove all tools:
+
+```kotlin
+Copilot.unregisterAllTools()
+```
+
+> **Note:** Registering tools at runtime allows the LLM to call your app's business logic in response to user requests, making the assistant highly extensible and interactive.
+
 ## Requirements
 
 - **Android Version:** minSdk 21+
@@ -66,11 +135,11 @@ Add the following inside your `MainActivity` or early app lifecycle method:
 
 ```kotlin
 val userData = CopilotUser(
-  userIdentifier = "", // mandatory
-  fullName = "", // mandatory
-  emailAddress = "", // Either email or phone is required
-  phoneNumber = "", // Either email or phone is required
+  fullName = "",
+  phoneNumber = "",
   profileImageUrl = "",
+  emailAddress = "",
+  userIdentifier = "",
   additionalFields = Map<String, Any>
 )
 
@@ -106,8 +175,8 @@ Add to your `AndroidManifest.xml`:
 
 ```xml
 
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permissionandroid:name="android.permission.RECORD_AUDIO" />
+<uses-permission android:name="android.permission.INTERNET" /><uses-permission
+android:name="android.permission.RECORD_AUDIO" />
 ```
 
 ## User Management
@@ -132,7 +201,7 @@ Copilot.notifyLoginSuccess(user)
 UnsetUser:
 
 ```kotlin
-Copilot.logout()
+Copilot.unsetUser()
 ```
 
 Set Context:
@@ -142,10 +211,10 @@ const val context = Map<String, Any>
 Copilot.setContext(context)
 ```
 
-UnsetContext:
+UnsetUser:
 
 ```kotlin
-Copilot.unsetContext()
+Copilot.unsetUser()
 ```
 
 ## Custom Appearance
@@ -197,25 +266,30 @@ be observed:
 ### Event Categories
 
 - **WidgetEvent**: Events related to the Copilot widget UI
+
   - `Open`: When widget is opened
   - `Close`: When widget is closed
   - `load`: When widget is loaded
 
 - **UserEvent**: Events related to user actions
+
   - `Message`: When user sends a message
   - `MessageStop`: When user stop a message
 
 - **AssistantEvent**: Events related to assistant actions
+
   - `Message`: When assistant sends a message
   - `Compoent`: When assistant send Component
   - `ComponentItemView`: When assistant send viewed Component
   - `Suggestion`: When suggestions are shown
 
 - **CallEvent**: Events related to voice calls
+
   - `Connected`: When call connects
   - `Disconnected`: When call disconnects
 
 - **CTAEvent**: Events related to Call-To-Action interactions
+
   - `Clicked`: When a CTA button is clicked
 
 - **Other**: Events that are not explicitly mapped to known types
@@ -247,7 +321,7 @@ val copilotCallback = object : CopilotCallback {
 ## API Reference Summary
 
 | Method                      | Description                                    |
-|-----------------------------|------------------------------------------------|
+| --------------------------- | ---------------------------------------------- |
 | `initialize(config)`        | Initialize SDK with token, user, and UI config |
 | `setUser(user)`             | Set user dynamically                           |
 | `notifyLoginSuccess(user)`  | Notify SDK of a successful login               |
@@ -255,6 +329,7 @@ val copilotCallback = object : CopilotCallback {
 | `open()`                    | Launch conversation UI                         |
 | `makeCall()`                | Start voice-based assistant call               |
 | `onReceiveTelemetry()`      | Observe telemetry events                       |
+
 ---
 
 ## Full Example (Client Integration)
